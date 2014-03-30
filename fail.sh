@@ -67,7 +67,7 @@ try yum install --quiet -y epel-release
 next
 
 step "Installing fail2ban:"
-try yum install --quiet -y fail2ban
+try yum install --quiet -y --enable-repo=epel fail2ban
 next
 
 step "Backing up fail2ban and iptables config:"
