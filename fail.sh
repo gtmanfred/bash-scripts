@@ -63,7 +63,7 @@ try echo "Not implemented yet."
 next
 
 step "Installing epel-release:"
-try yum install --quiet -y epel-release
+try yum install --quiet -y  epel-release
 next
 
 step "Installing fail2ban:"
