@@ -62,13 +62,24 @@ step "Checking Linux Version:"
 try echo "Not implemented yet."
 next
 
-step "Installing epel-release:"
-try yum install --quiet -y  epel-release
-next
+cmd=(yum install --quiet -y )
+if yum repolist | grep -q nu_novell_com 2>&1 1>/dev/null; then
+    cmd=(${cmd[@]} --disablerepo=nu_novell_com )
+fi
 
-step "Installing fail2ban:"
-try yum install --quiet -y --enablerepo=epel fail2ban
-next
+if ! yum repolist | grep -q epel 2>&1 >/dev/null; then
+    step "Installing epel-release:"
+    try ${cmd[@]} epel-release
+    next
+fi
+
+cmd=(${cmd[@]} --enablerepo=epel)
+
+if ! rpm -q fail2ban; then
+    step "Installing fail2ban:"
+    try ${cmd[@]} fail2ban
+    next
+fi
 
 step "Backing up fail2ban and iptables config:"
 try cp /etc/fail2ban/jail.conf ${BACKUP_DIR}jail.conf.bak
