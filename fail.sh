@@ -90,6 +90,9 @@ next
 
 step "Configuring fail2ban:"
 try sed -i '/sendmail-whois\[name=SSH/d' /etc/fail2ban/jail.conf
+if grep -q 'release 5\.' /etc/redhat-release; then
+    try sed -i '214s/except Exception as e:/except Exception, e:/' /usr/share/fail2ban/server/filterpyinotify.py
+fi
 try chkconfig fail2ban on
 try service fail2ban start 1>/dev/null
 try service fail2ban status
